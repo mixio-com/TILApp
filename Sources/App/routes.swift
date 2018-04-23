@@ -6,6 +6,12 @@ import Vapor
 /// [Learn More →](https://docs.vapor.codes/3.0/getting-started/structure/#routesswift)
 public func routes(_ router: Router) throws {
 
+    router.get("api", "acronyms") { req -> Future<[Acronym]> in
+
+            return Acronym.query(on: req).all()
+
+    }
+
     router.post("api", "acronyms") { req -> Future<Acronym> in
 
         return try req.content.decode(Acronym.self).flatMap(to: Acronym.self) { acronym in
