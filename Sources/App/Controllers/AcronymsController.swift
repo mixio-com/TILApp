@@ -9,14 +9,15 @@ struct AcronymsController: RouteCollection {
         let acronymsRoutes = router.grouped("api", "acronyms")
 
         acronymsRoutes.get(use: getAllHandler)
-        acronymsRoutes.post(Acronym.self, use: createHandler)
-        acronymsRoutes.get(Acronym.parameter, use: getHandler)
-        acronymsRoutes.put(Acronym.parameter, use: updateHandler)
-        acronymsRoutes.delete(Acronym.parameter, use: deleteHandler)
         acronymsRoutes.get("search", use: searchHandler)
         acronymsRoutes.get("fullsearch", use: multisearchHandler)
         acronymsRoutes.get("first", use: firstHandler)
         acronymsRoutes.get("sorted", use: sortedHandler)
+        acronymsRoutes.get(Acronym.parameter, use: getHandler)
+        acronymsRoutes.post(Acronym.self, use: createHandler)
+        acronymsRoutes.put(Acronym.parameter, use: updateHandler)
+        acronymsRoutes.delete(Acronym.parameter, use: deleteHandler)
+
     }
 
     func getAllHandler(_ req: Request) throws -> Future<[Acronym]> {
