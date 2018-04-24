@@ -9,6 +9,7 @@ struct UsersController: RouteCollection {
         usersRoute.get(use: getAllHandler)
         usersRoute.get(User.parameter, use: getHandler)
         usersRoute.get(User.parameter, "acronyms", use: getAcronymsHandler)
+        usersRoute.delete(User.parameter, use: deleteHandler)
 
     }
 
@@ -39,5 +40,15 @@ struct UsersController: RouteCollection {
         }
 
     }
+
+    func deleteHandler(_ req: Request) throws -> Future<HTTPStatus> {
+
+        return try req.parameters.next(User.self).flatMap(to: HTTPStatus.self) { user in
+
+            return acronym.delete(on:req).transform(to: HTTPStatus.noContent)
+        }
+
+    }
+
 
 }
