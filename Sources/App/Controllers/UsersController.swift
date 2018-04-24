@@ -45,7 +45,7 @@ struct UsersController: RouteCollection {
 
         return try req.parameters.next(User.self).flatMap(to: HTTPStatus.self) { user in
 
-            return acronym.delete(on:req).transform(to: HTTPStatus.noContent)
+            return user.delete(on:req).transform(to: HTTPStatus.noContent)
         }
 
     }
