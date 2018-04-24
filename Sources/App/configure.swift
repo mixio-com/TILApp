@@ -2,13 +2,18 @@ import FluentPostgreSQL
 import Vapor
 
 public func configure (_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
-    
+
     try services.register(FluentPostgreSQLProvider())
     
     let router = EngineRouter.default()
     try routes(router)
     services.register(router, as: Router.self)
-    
+
+    var commandConfig = CommandConfig.default()
+    commandConfig.use(RevertCommand.self, as: "revert")
+    services.register(commandConfig)
+
+
     var middlewares = MiddlewareConfig()
     middlewares.use(DateMiddleware.self)
     middlewares.use(ErrorMiddleware.self)
@@ -33,8 +38,8 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
     services.register(databases)
     
     var migrations = MigrationConfig()
-    migrations.add(model: Acronym.self, database: .psql)
     migrations.add(model: User.self, database: .psql)
+    migrations.add(model: Acronym.self, database: .psql)
     services.register(migrations)
     
 }

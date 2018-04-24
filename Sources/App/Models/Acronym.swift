@@ -8,7 +8,7 @@ final class Acronym: Codable {
     var long: String
     var userID: User.ID
 
-    init(short: String, long: String, userID: User.ID = UUID("273FC93B-D9FC-4532-9451-3FB6196577CC")!) {
+    init(short: String, long: String, userID: User.ID) {
 
         self.short = short
         self.long = long
@@ -19,6 +19,30 @@ final class Acronym: Codable {
 }
 
 extension Acronym: PostgreSQLModel {}
-extension Acronym: Migration {}
 extension Acronym: Content {}
 extension Acronym: Parameter {}
+
+extension Acronym {
+
+    var user: Parent<Acronym, User> {
+
+        return parent(\.userID)
+
+    }
+
+}
+
+extension Acronym: Migration {
+
+    static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
+
+        return Database.create(self, on: connection) { builder in
+
+            try addProperties(to:builder)
+            try builder.addReference(from: \.userID, to: \User.id)
+
+        }
+
+    }
+
+}
