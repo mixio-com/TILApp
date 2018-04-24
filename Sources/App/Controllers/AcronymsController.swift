@@ -18,7 +18,7 @@ struct AcronymsController: RouteCollection {
         acronymsRoutes.post(Acronym.self, use: createHandler)
         acronymsRoutes.put(Acronym.parameter, use: updateHandler)
         acronymsRoutes.delete(Acronym.parameter, use: deleteHandler)
-        acronymsRouter.post(Acronym.parameter, "categories", Category.parameter, use: addCategoriesHandler)
+        acronymsRoutes.post(Acronym.parameter, "categories", Category.parameter, use: addCategoriesHandler)
 
     }
 
