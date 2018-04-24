@@ -54,6 +54,7 @@ struct AcronymsController: RouteCollection {
 
             acronym.short = updatedAcronym.short
             acronym.long = updatedAcronym.long
+            acronym.userID = updatedAcronym.userID
 
             return acronym.save(on: req)
 
