@@ -18,6 +18,7 @@ struct AcronymsController: RouteCollection {
         acronymsRoutes.post(Acronym.self, use: createHandler)
         acronymsRoutes.put(Acronym.parameter, use: updateHandler)
         acronymsRoutes.delete(Acronym.parameter, use: deleteHandler)
+        acronymsRouter.post(Acronym.parameter, "categories", Category.parameter, use: addCategoriesHandler)
 
     }
 
@@ -121,6 +122,18 @@ struct AcronymsController: RouteCollection {
         return try req.parameters.next(Acronym.self).flatMap(to: User.self) { acronym in
 
             try acronym.user.get(on: req)
+
+        }
+
+    }
+
+    func addCategoriesHandler(_ req: Request) throws -> Future<HTTPStatus> {
+
+        return try flatMap(to: HTTPStatus.self, req.parameters.next(Acronym.self), req.parameters.next(Category.self)) { acronym, category in
+
+            let pivot = try AcronymCategoryPivot(acronym.requireID(), category.requireID())
+
+            return pivot.save(on: req).transform(to: .created)
 
         }
 
