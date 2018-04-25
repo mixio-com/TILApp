@@ -4,12 +4,13 @@ struct UsersController: RouteCollection {
 
     func boot(router: Router) throws {
 
-        let usersRoute = router.grouped("api", "users")
-        usersRoute.post(User.self, use: createHandler)
-        usersRoute.get(use: getAllHandler)
-        usersRoute.get(User.parameter, use: getHandler)
-        usersRoute.get(User.parameter, "acronyms", use: getAcronymsHandler)
-        usersRoute.delete(User.parameter, use: deleteHandler)
+        let usersRoutes = router.grouped("api", "users")
+        usersRoutes.post(User.self, use: createHandler)
+        usersRoutes.get(use: getAllHandler)
+        usersRoutes.get(User.parameter, use: getHandler)
+        usersRoutes.get(User.parameter, "acronyms", use: getAcronymsHandler)
+        usersRoutes.delete(User.parameter, use: deleteHandler)
+        usersRoutes.put(User.parameter, use: updateHandler)
 
     }
 
@@ -46,6 +47,19 @@ struct UsersController: RouteCollection {
         return try req.parameters.next(User.self).flatMap(to: HTTPStatus.self) { user in
 
             return user.delete(on:req).transform(to: HTTPStatus.noContent)
+        }
+
+    }
+
+    func updateHandler(_ req: Request) throws -> Future<User> {
+
+        return try flatMap(to: User.self, req.parameters.next(User.self), req.content.decode(User.self)) { user, updatedUser in
+
+            user.name = updatedUser.name
+            user.username = updatedUser.username
+
+            return user.save(on: req)
+
         }
 
     }
