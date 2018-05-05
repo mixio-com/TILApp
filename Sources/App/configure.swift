@@ -15,12 +15,12 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
 
 
     var middlewares = MiddlewareConfig()
-    middlewares.use(DateMiddleware.self)
+    // middlewares.use(DateMiddleware.self) // 'DateMiddleware' is deprecated: Date header is now added automatically by HTTPServer
     middlewares.use(ErrorMiddleware.self)
     services.register(middlewares)
     
     // Configure a database.
-    var databases = DatabaseConfig()
+    var databases = DatabasesConfig()
     
     let hostname = Environment.get("DATABASE_HOSTNAME") ?? "localhost"
     let username = Environment.get("DATABASE_USER") ?? "vapor"
