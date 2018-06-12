@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Acronym: #(title)</title>
+    </head>
+    <body>
+        #if(acronym) {
+        	<table>
+        		<thead>
+        			<tr>
+        				<th>User</th>
+        				<th>Short</th>
+        				<th>Long</th>
+        			</tr>
+        		</thead>
+        		<tbody>
+            		<tr>
+            			<td>#(user.name)</td>
+            			<td>#(acronym.short)</td>
+            			<td>#(acronym.long)</td>
+            		</tr>
+        		</tbody>
+        	</table>
+        }
+    </body>
+</html>

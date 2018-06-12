@@ -1,5 +1,6 @@
 import FluentPostgreSQL
 import Vapor
+import Leaf
 
 public func configure (_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
 
@@ -63,5 +64,9 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
     migrations.add(model: Category.self, database: .psql)
     migrations.add(model: AcronymCategoryPivot.self, database: .psql)
     services.register(migrations)
-    
+
+    // Configure Leaf.
+    try services.register(LeafProvider())
+    config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+
 }
