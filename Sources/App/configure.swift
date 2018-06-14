@@ -4,6 +4,9 @@ import Leaf
 
 public func configure (_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
 
+    let serverConfig = NIOServerConfig.default(hostname: "192.168.1.19", port: 8080)
+    services.register(serverConfig)
+
     try services.register(FluentPostgreSQLProvider())
     
     let router = EngineRouter.default()
@@ -17,6 +20,7 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
 
     var middlewares = MiddlewareConfig()
     // middlewares.use(DateMiddleware.self) // 'DateMiddleware' is deprecated: Date header is now added automatically by HTTPServer
+    middlewares.use(FileMiddleware.self)
     middlewares.use(ErrorMiddleware.self)
     services.register(middlewares)
     

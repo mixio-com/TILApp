@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Acronym: #(title)</title>
-    </head>
-    <body>
-        #if(acronym) {
-        	<table>
-        		<thead>
-        			<tr>
-        				<th>User</th>
-        				<th>Short</th>
-        				<th>Long</th>
-        			</tr>
-        		</thead>
-        		<tbody>
-            		<tr>
-            			<td>#(user.name)</td>
-            			<td>#(acronym.short)</td>
-            			<td>#(acronym.long)</td>
-            		</tr>
-        		</tbody>
-        	</table>
+#set("content") {
+    <h1>#(acronym.short)</h1>
+    <h2>#(acronym.long)</h2>
+    <p>Created by <a href="/users/#(user.id)">#(user.name)</a></p>
+    #if(count(categories) > 0) {
+    <h3>Categories</h3>
+    <ul>
+        #for(category in categories) {
+            <li>
+                <a href="/categories/#(category.id)">#(category.name)</a>
+            </li>
         }
-    </body>
-</html>
+    </ul>
+    }
+    <form method="post" action="/acronyms/#(acronym.id)/delete">
+        <a class="btn btn-primary" href="/acronyms/#(acronym.id)/edit" role="button">Edit</a>&nbsp;<input class="btn btn-danger" type="submit" value="Delete" />
+    </form>}
+#embed("base")

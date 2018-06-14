@@ -1,33 +1,24 @@
-<!DOCTYPE html>
-#// 1
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        #// 2
-        <title>#(title) | Acronyms</title>
-    </head>
-    <body>
-        #// 3
-        <h1>Hello #(title) World!</h1>
-        #if(acronyms) {
-        	<table>
-        		<thead>
-        			<tr>
-        				<th>Short</th>
-        				<th>Long</th>
-        			</tr>
-        		</thead>
-        		<tbody>
-            #for(acronym in acronyms) {
-            		<tr>
-            			<td><a href="/acronyms/#(acronym.id)">#(acronym.short)</a></td>
-            			<td>#(acronym.long)</td>
-            		</tr>
-        	}
-        		</tbody>
-        	</table>
-        } else {
-            <h2>There aren't any acronyms yet!</h2>
+#set("content") {
+    <h1>#(title)</h1>
+    #if(acronyms) {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Short</th>
+                    <th>Long</th>
+                </tr>
+            </thead>
+            <tbody>
+        #for(acronym in acronyms) {
+                <tr>
+                    <td><a href="/acronyms/#(acronym.id)">#(acronym.short)</a></td>
+                    <td>#(acronym.long)</td>
+                </tr>
         }
-    </body>
-</html>
+            </tbody>
+        </table>
+    } else {
+        <h2>There aren't any acronyms yet!</h2>
+    }
+}
+#embed("base")

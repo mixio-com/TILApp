@@ -1,4 +1,5 @@
 import Vapor
+import Crypto
 
 struct UsersController: RouteCollection {
 
@@ -16,6 +17,7 @@ struct UsersController: RouteCollection {
 
     func createHandler(_ req: Request, user: User) throws -> Future<User> {
 
+        user.password = try BCrypt.hash(user.password)
         return user.save(on: req)
 
     }
