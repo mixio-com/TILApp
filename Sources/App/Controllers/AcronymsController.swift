@@ -1,6 +1,6 @@
 import Vapor
 import Fluent
-//import FluentSQL
+import Authentication
 
 struct AcronymsController: RouteCollection {
 
@@ -13,11 +13,17 @@ struct AcronymsController: RouteCollection {
         acronymsRoutes.get("sorted", use: sortedHandler)
         acronymsRoutes.get(Acronym.parameter, use: getHandler)
         acronymsRoutes.get(Acronym.parameter, "user", use: getUserHandler)
-        acronymsRoutes.post(Acronym.self, use: createHandler)
+        // remove the unautheticated route.
+        // acronymsRoutes.post(Acronym.self, use: createHandler)
         acronymsRoutes.put(Acronym.parameter, use: updateHandler)
         acronymsRoutes.delete(Acronym.parameter, use: deleteHandler)
         acronymsRoutes.post(Acronym.parameter, "categories", Category.parameter, use: addCategoriesHandler)
         acronymsRoutes.get(Acronym.parameter, "categories", use: getCategoriesHandler)
+
+        let basicAuthMiddleware = User.basicAuthMiddleware(using: BCryptDigest())
+        let guardAuthMiddleware = User.guardAuthMiddleware()
+        let protected = acronymsRoutes.grouped(basicAuthMiddleware, guardAuthMiddleware)
+        protected.post(Acronym.self, use: createHandler)
     }
 
     func getAllHandler(_ req: Request) throws -> Future<[Acronym]> {
