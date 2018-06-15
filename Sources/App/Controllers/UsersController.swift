@@ -19,9 +19,7 @@ struct UsersController: RouteCollection {
     }
 
     func getAllHandler(_ req: Request) throws -> Future<[User.Public]> {
-        return User.query(on: req).all().map(to: [User.Public].self) { users in
-            return users.map { $0.convertToPublic() }
-        }
+        return User.query(on: req).decode(User.Public.self).all()
     }
 
     func getHandler(_ req: Request) throws -> Future<User.Public> {

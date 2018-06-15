@@ -21,7 +21,7 @@ extension Category {
     }
 
     static func addCategory(_ name: String, to acronym: Acronym, on req: Request) throws -> Future<Void> {
-        return try Category.query(on: req)
+        return Category.query(on: req)
             .filter(\.name == name)
             .first()
             .flatMap(to: Void.self) { foundCategory in

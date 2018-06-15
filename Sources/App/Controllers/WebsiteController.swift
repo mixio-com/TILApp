@@ -1,6 +1,7 @@
 import Vapor
 import Leaf
 import Fluent
+import Crypto
 
 struct WebsiteController: RouteCollection {
 
@@ -20,6 +21,9 @@ struct WebsiteController: RouteCollection {
 
         router.get("users", use: allUsersHandler)
         router.get("users", User.parameter, use: userHandler)
+        router.get("users", "create", use: createUserHandler)
+        router.post(CreateUserData.self, at: "users", "create", use: createUserPostHandler)
+
     }
 
     func indexHandler(_ req: Request) throws -> Future<View> {
@@ -32,7 +36,7 @@ struct WebsiteController: RouteCollection {
 
     func acronymHandler(_ req: Request) throws -> Future<View> {
         return try req.parameters.next(Acronym.self).flatMap(to: View.self) { acronym in
-            return try acronym.user.get(on: req).flatMap(to: View.self) { user in
+            return acronym.user.get(on: req).flatMap(to: View.self) { user in
                 let categories = try acronym.categories.query(on: req).all()
                 let context = AcronymContext(title: acronym.short, acronym: acronym, user: user, categories: categories)
                 return try req.view().render("acronym", context)
@@ -60,6 +64,22 @@ struct WebsiteController: RouteCollection {
         }
     }
 
+    func createUserHandler(_ req: Request) throws -> Future<View> {
+        return try req.view().render("createUser")
+    }
+
+    func createUserPostHandler(_ req: Request, data: CreateUserData) throws -> Future<View> {
+        let password = try BCrypt.hash(data.password)
+        let user = User(name: data.name, username: data.username, password: password)
+        return user.save(on: req).flatMap(to: View.self) { user in
+            if user.id == nil {
+                throw Abort(.internalServerError)
+            }
+            let acronyms = try user.acronyms.query(on: req).all()
+            let context = UserContext(title: user.name, user: user, acronyms: acronyms)
+            return try req.view().render("user", context)
+        }
+    }
 
     func editAcronymHandler(_ req: Request) throws -> Future<View> {
         return try req.parameters.next(Acronym.self).flatMap(to: View.self) { acronym in
@@ -68,20 +88,6 @@ struct WebsiteController: RouteCollection {
             return try req.view().render("createAcronym", context)
         }
     }
-
-//    func editAcronymPostHandler(_ req: Request) throws -> Future<Response> {
-//        return try flatMap(to: Response.self, req.parameters.next(Acronym.self), req.content.decode(Acronym.self)) { acronym, data in
-//            acronym.short = data.short
-//            acronym.long = data.long
-//            acronym.userID = data.userID
-//            return acronym.save(on: req).map(to: Response.self) { savedAcronym in
-//                guard let id = savedAcronym.id else {
-//                    throw Abort(.internalServerError)
-//                }
-//                return req.redirect(to: "/acronyms/\(id)")
-//            }
-//        }
-//    }
 
     func editAcronymPostHandler(_ req: Request) throws -> Future<Response> {
         return try flatMap(to: Response.self, req.parameters.next(Acronym.self),req.content.decode(CreateAcronymData.self)) { acronym, data in
@@ -148,7 +154,7 @@ struct WebsiteController: RouteCollection {
             return try category.acronyms.query(on: req).all().flatMap(to: View.self) { acronyms in
                 var categoryObjects: [CategoryObjects] = []
                 for acronym in acronyms {
-                    let user = try acronym.user.get(on: req)
+                    let user = acronym.user.get(on: req)
                     categoryObjects.append(CategoryObjects(acronym: acronym, user:user))
                 }
                 let context = CategoryContext(title: category.name, category: category, categoryObjects: categoryObjects)
@@ -188,6 +194,12 @@ struct CreateAcronymData: Content {
     let short: String
     let long: String
     let categories: [String]?
+}
+
+struct CreateUserData: Content {
+    let name: String
+    let username: String
+    let password: String
 }
 
 struct EditAcronymContext: Encodable {

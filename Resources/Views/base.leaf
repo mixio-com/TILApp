@@ -49,6 +49,11 @@
                             Create An Acronym
                         </a>
                     </li>
+                    <li class="nav-item #if(title == "Create A User"){active}">
+                        <a href="/users/create" class="nav-link">
+                            Create A User
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

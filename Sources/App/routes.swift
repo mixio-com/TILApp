@@ -1,7 +1,6 @@
 import Routing
 import Vapor
 import Fluent
-import FluentSQL
 
 /// Register your application's routes here.
 ///
