@@ -61,7 +61,7 @@ final class CategoryTests: XCTestCase {
 
   func testCategoryCanBeSavedWithAPI() throws {
     let category = Category(name: categoryName)
-    let receivedCategory = try app.getResponse(to: categoriesURI, method: .POST, headers: ["Content-Type": "application/json"], data: category, decodeTo: Category.self)
+    let receivedCategory = try app.getResponse(to: categoriesURI, method: .POST, headers: ["Content-Type": "application/json"], data: category, decodeTo: Category.self, loggedInRequest: true)
 
     XCTAssertEqual(receivedCategory.name, categoryName)
     XCTAssertNotNil(receivedCategory.id)
@@ -82,20 +82,22 @@ final class CategoryTests: XCTestCase {
   }
 
   func testGettingACategoriesAcronymsFromTheAPI() throws {
-    let acronymShort = "OMG"
-    let acronymLong = "Oh My God"
-    let acronym = try Acronym.create(short: acronymShort, long: acronymLong, on: conn)
-    let acronym2 = try Acronym.create(on: conn)
 
     let category = try Category.create(name: categoryName, on: conn)
 
-    _ = try app.sendRequest(to: "/api/acronyms/\(acronym.id!)/categories/\(category.id!)", method: .POST)
-    _ = try app.sendRequest(to: "/api/acronyms/\(acronym2.id!)/categories/\(category.id!)", method: .POST)
+    let acronymShort = "OMG"
+    let acronymLong = "Oh My God"
+    let acronym1 = try Acronym.create(short: acronymShort, long: acronymLong, on: conn)
+    let acronym2 = try Acronym.create(on: conn)
+    let acronym1URL = "/api/acronyms/\(acronym1.id!)/categories/\(category.id!)"
+    let acronym2URL = "/api/acronyms/\(acronym2.id!)/categories/\(category.id!)"
+    _ = try app.sendRequest(to: acronym1URL, method: .POST, loggedInRequest: true)
+    _ = try app.sendRequest(to: acronym2URL, method: .POST, loggedInRequest: true)
 
     let acronyms = try app.getResponse(to: "\(categoriesURI)\(category.id!)/acronyms", decodeTo: [Acronym].self)
 
     XCTAssertEqual(acronyms.count, 2)
-    XCTAssertEqual(acronyms[0].id, acronym.id)
+    XCTAssertEqual(acronyms[0].id, acronym1.id)
     XCTAssertEqual(acronyms[0].short, acronymShort)
     XCTAssertEqual(acronyms[0].long, acronymLong)
   }
