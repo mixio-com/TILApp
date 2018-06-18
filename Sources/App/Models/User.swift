@@ -73,6 +73,9 @@ extension User: TokenAuthenticatable {
     typealias TokenType = Token
 }
 
+extension User: PasswordAuthenticatable {}
+extension User: SessionAuthenticatable {}
+
 struct AdminUser: Migration {
     typealias Database = PostgreSQLDatabase
     static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {

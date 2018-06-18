@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/vapor/auth.git",
         "state": {
           "branch": null,
-          "revision": "b84242ee3d450516b050f7a64fc0b81604f56077",
-          "version": "2.0.0-rc.4.1"
+          "revision": "8c783272bbef7490781e0879ae5e9b5ceced0ec0",
+          "version": "2.0.0-rc.5"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/vapor/fluent.git",
         "state": {
           "branch": null,
-          "revision": "3b52f5c2124a40460418881ca64305eb39023e43",
-          "version": "3.0.0-rc.3"
+          "revision": "04c44c636a5f4ab6a81e47db762a32adf25c1cf8",
+          "version": "3.0.0-rc.3.0.3"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-postgresql.git",
         "state": {
           "branch": null,
-          "revision": "aed43aaccb0d0ecc58a716df39e753f8fc6c58ad",
-          "version": "1.0.0-rc.3"
+          "revision": "1f74810616677ab984b8bb3de6dd1de8699abbd2",
+          "version": "1.0.0-rc.3.0.2"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/vapor/postgresql.git",
         "state": {
           "branch": null,
-          "revision": "8a37a5ddf864ce9c371faca7bab3f209a825657b",
-          "version": "1.0.0-rc.3"
+          "revision": "0fd51eca3df787b893c8c73ea0732b50ec221ffb",
+          "version": "1.0.0-rc.3.0.4"
         }
       },
       {
@@ -125,6 +125,24 @@
           "branch": null,
           "revision": "695afc5205aaa49fca092b94b479ff71c43d9d3c",
           "version": "1.8.0"
+        }
+      },
+      {
+        "package": "swift-nio-http2",
+        "repositoryURL": "https://github.com/apple/swift-nio-http2.git",
+        "state": {
+          "branch": null,
+          "revision": "d17462f586c3f2c9c12f81e37ed0d8a59ac9be1b",
+          "version": "0.1.0"
+        }
+      },
+      {
+        "package": "swift-nio-nghttp2-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-nghttp2-support.git",
+        "state": {
+          "branch": null,
+          "revision": "324e323e92ab12e565d63bffb07b5833a63a425f",
+          "version": "1.0.0"
         }
       },
       {

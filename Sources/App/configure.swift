@@ -20,9 +20,9 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
 
 
     var middlewares = MiddlewareConfig()
-    // middlewares.use(DateMiddleware.self) // 'DateMiddleware' is deprecated: Date header is now added automatically by HTTPServer
     middlewares.use(FileMiddleware.self)
     middlewares.use(ErrorMiddleware.self)
+    middlewares.use(SessionsMiddleware.self)
     services.register(middlewares)
     
     // Configure a database.
@@ -77,5 +77,7 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
 
     try services.register(AuthenticationProvider())
+
+    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
 
 }
