@@ -14,7 +14,7 @@
         #if(title == "Edit Acronym") {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.1/css/select2.min.css" integrity="sha384-Tkthu0AGB6QfU+FBA1n/6ExgfaQ2UMBXlaFaY8fVj70AgQEuRUP3oIKmmwZnAhIW" crossorigin="anonymous">
         }
-
+            <link rel="stylesheet" href="/styles/style.css">
       <title>#(title) | Acronyms</title>
     </head>
     <body>
@@ -54,8 +54,14 @@
                             Create A User
                         </a>
                     </li>
+                #if(!userLoggedIn) {
+                    <li class="nav-item #if(title == "Register"){active}">
+                        <a href="/register" class="nav-link">Register</a>
+                    </li>
+                }
                 </ul>
             #if(userLoggedIn) {
+                <span class="span-current_user">User: #(username)</span>
                 <form class="form-inline" action="/logout" method="POST">
                     <input class="nav-link btn btn-link" type="submit" value="Log out">
                 </form>
