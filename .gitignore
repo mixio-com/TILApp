@@ -1,11 +1,15 @@
-
 # Created by https://www.gitignore.io/api/vapor
+
+### Jazzy ###
+docs
+.jazzy.yaml
 
 ### Vapor ###
 Config/secrets
 
 ### Vapor Patch ###
 Packages
+build
 .build
 xcuserdata
 *.xcodeproj
