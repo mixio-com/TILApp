@@ -175,28 +175,10 @@ struct WebsiteController: RouteCollection {
         }
     }
 
-//    func categoryHandler(_ req: Request) throws -> Future<View> {
-//        return try req.parameters.next(Category.self).flatMap(to: View.self) { category in
-//            return try category.acronyms.query(on: req).all().flatMap(to: View.self) { acronyms in
-//                var categoryObjects: [CategoryObjects] = []
-//                for acronym in acronyms {
-//                    let user = acronym.user.get(on: req)
-//                    categoryObjects.append(CategoryObjects(acronym: acronym, user:user))
-//                }
-//                let context = CategoryContext(title: category.name, category: category, categoryObjects: categoryObjects)
-//                return try req.view().render("category", context)
-//            }
-//
-//        }
-//    }
-
     func categoryHandler(_ req: Request) throws -> Future<View> {
         return try req.parameters.next(Category.self).flatMap(to: View.self) { category in
             return try category.acronyms.query(on: req).join(\User.id, to:\Acronym.userID).alsoDecode(User.self).all().flatMap(to: View.self) { tuples in
-                var categoryObjects: [CategoryObjects] = []
-                for tuple in tuples {
-                    categoryObjects.append(CategoryObjects(acronym: tuple.0, user:tuple.1))
-                }
+                let categoryObjects = tuples.map{ CategoryObjects(acronym: $0.0, user:$0.1) }
                 let context = CategoryContext(title: category.name, category: category, categoryObjects: categoryObjects)
                 return try req.view().render("category", context)
             }
