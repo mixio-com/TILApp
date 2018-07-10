@@ -72,6 +72,8 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
     migrations.add(migration: AdminUser.self, database: .psql)
     services.register(migrations)
 
+    Account.defaultDatabase = .psql
+    
     // Configure Leaf.
     try services.register(LeafProvider())
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
@@ -79,5 +81,7 @@ public func configure (_ config: inout Config, _ env: inout Environment, _ servi
     try services.register(AuthenticationProvider())
 
     config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
+
+    services.register(JJService.self)
 
 }

@@ -11,10 +11,12 @@ public func routes(_ router: Router) throws {
     let usersController = UsersController()
     let categoriesController = CategoriesController()
     let websiteController = WebsiteController()
+    let accountsController = AccountsController()
 
     try router.register(collection: acronymsController)
     try router.register(collection: usersController)
     try router.register(collection: categoriesController)
     try router.register(collection: websiteController)
+    try router.register(collection: accountsController)
 
 }

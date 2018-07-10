@@ -40,9 +40,13 @@ final class AcronymTests : XCTestCase {
   var conn: PostgreSQLConnection!
 
   override func setUp() {
-    try! Application.reset()
-    app = try! Application.testable()
-    conn = try! app.newConnection(to: .psql).wait()
+    do {
+    try Application.reset()
+    app = try Application.testable()
+    conn = try app.newConnection(to: .psql).wait()
+    } catch {
+        print("\(error)")
+    }
   }
 
   override func tearDown() {
